@@ -117,7 +117,10 @@ func GetGroupEntry() []*Group {
 	// Restart scanning from the begging of the group file.
 	C.setgrent()
 
-	for groupC, err := C.getgrent(); groupC != nil && err == nil; groupC, err = C.getgrent() {
+	for groupC, _ := C.getgrent(); groupC != nil; groupC, _ = C.getgrent() {
+		if groupC == nil {
+			continue
+		}
 		group := groupC2Go(groupC)
 		groups = append(groups, group)
 	}

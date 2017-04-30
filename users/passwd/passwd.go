@@ -96,7 +96,10 @@ func GetPasswdEntry() []*Passwd {
 	// Restart scanning from the begging of the password file.
 	C.setpwent()
 
-	for passwdC, err := C.getpwent(); passwdC != nil && err == nil; passwdC, err = C.getpwent() {
+	for passwdC, _ := C.getpwent(); passwdC != nil; passwdC, _ = C.getpwent() {
+		if passwdC == nil {
+			continue
+		}
 		passwd := passwdC2Go(passwdC)
 		passwds = append(passwds, passwd)
 	}
